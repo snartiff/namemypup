@@ -20,8 +20,10 @@ export default {
   },
   mounted(){
     console.log('mounted')
+    const url = process.env.VUE_APP_DOGNAMESURL
     axios
-      .get('https://localhost:5001/api/dognames')
+      // .get('https://localhost:5001/api/dognames')
+      .get(url + "dognames")
       .then(response => (this.dogNames = response.data))
   }
 }

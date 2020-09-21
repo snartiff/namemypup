@@ -1,7 +1,6 @@
 // module.exports = {
-//     configureWebpack: {
-//       devServer: {
-//         headers: { "Access-Control-Allow-Origin": "*" }
-//       }
-//     }
-//   };
+    // configureWebpack: {
+    //   devServer: {
+    //     headers: { "Access-Control-Allow-Origin": "*" }
+    //   }
+    // }
