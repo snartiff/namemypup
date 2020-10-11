@@ -1,15 +1,23 @@
 <template>
-  <div class="hello">
+  <!-- <div class="hello">
     <ul id="dogNamesList">
       <li v-for="dogName in dogNames" v-bind:key="dogName.id">
         {{ dogName.id }}. {{dogName.name}}
       </li>
     </ul>
-  </div>
+  </div> -->
   <div id="randomDogNameWidget">
-    <button class="button is-warning is-rounded" @click="selectRandomDogName(dogNames)">Retrieve a Name <i id="retrieveNameIcon" class="fas fa-paw"></i></button>
-    <h1>Your dog's name:</h1>
-    <h1>{{randomDogName == null ? "" : randomDogName.name}}</h1>
+    <button class="button is-warning is-rounded" @click="selectRandomDogName(dogNames)">Retrieve a Name <i id="retrieveNameIcon" class="fas fa-paw 2x"></i></button>
+    <template v-if="randomDogName != null">
+      <div>
+        <div id="randomDogName">
+          <h1 id="dogName" class="title is-1">
+            <i @click="saveDogNameToFavorites()" id="favoriteHeartIcon" v-bind:class="heartIcon.activeClass"></i>
+            {{randomDogName.name}}
+          </h1>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -23,10 +31,23 @@ export default {
     return {
       dogNames: null,
       randomDogName: null,
+      heartIcon: {
+        isActive: false,
+        activeClass: 'far fa-heart'
+      }
     }
   },
   methods:{
+    toggleHeartIcon(){
+      this.heartIcon.isActive = !this.heartIcon.isActive
+      this.heartIcon.activeClass = this.heartIcon.isActive ? 'fas fa-heart' : 'far fa-heart'
+    },
+    saveDogNameToFavorites(){
+      this.toggleHeartIcon()
+    },
     selectRandomDogName(dogNames){
+      this.heartIcon.isActive = false
+      this.heartIcon.activeClass = 'far fa-heart'
       this.randomDogName = _.sample(dogNames)
     }
   },
@@ -41,6 +62,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.fa-heart{
+ color: pink;
+}
+#favoriteHeartIcon{
+  margin-right: 5px;
+}
+#dogName {
+font-family: 'Patrick Hand SC', cursive;
+}
+/* #randomDogName{
+  display: inline-block;
+} */
 #retrieveNameIcon{
   margin-left: 5px;
 }
