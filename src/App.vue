@@ -1,14 +1,15 @@
 <template>
-  <HelloWorld />
+  <app-navigation></app-navigation>
+  <router-view />
 </template>
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Navigation from './components/Navigation.vue'
 import 'bulma/css/bulma.css'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    'app-navigation': Navigation
   }
 }
 </script>
