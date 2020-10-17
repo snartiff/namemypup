@@ -1,11 +1,11 @@
 <template>
-  <!-- <div class="hello">
+  <div class="hello">
     <ul id="dogNamesList">
-      <li v-for="dogName in dogNames" v-bind:key="dogName.id">
-        {{ dogName.id }}. {{dogName.name}}
+      <li v-for="dogName in dogNames" v-bind:key="dogName.dogname_id">
+        {{ dogName.dognames_id }}. {{dogName.name}}
       </li>
     </ul>
-  </div> -->
+  </div>
   <div id="randomDogNameWidget">
     <button class="button is-warning is-rounded" @click="selectRandomDogName(dogNames)">Retrieve a Name <i id="retrieveNameIcon" class="fas fa-paw 2x"></i></button>
     <template v-if="randomDogName != null">
