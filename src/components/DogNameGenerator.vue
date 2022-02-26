@@ -1,5 +1,20 @@
 <template>
-  <div class="hello">
+<DataTable :value="dogNames" class="table table is-bordered is-striped" responsiveLayout="stack" breakpoint="960px">
+    <Column field="dognames_id" header="ID"></Column>
+    <Column field="name" header="NAME"></Column>
+    <Column field="tags" header="TAGS">
+    <template #body="slotProps">
+      <ul>
+        <li>
+          {{slotProps.data.tags}}
+        </li>
+      </ul>
+    </template>
+    </Column>
+    <Column header="FAVORITES"></Column>
+</DataTable>
+    <button class="button is-warning is-rounded" @click="viewProperties()">Retrieve a Name <i id="retrieveNameIcon" class="fas fa-paw 2x"></i></button>
+  <!-- <div class="hello">
     <ul id="dogNamesList">
       <li v-for="dogName in dogNames" v-bind:key="dogName.dogname_id">
         {{ dogName.dognames_id }}. {{dogName.name}}
@@ -18,19 +33,27 @@
         </div>
       </div>
     </template>
-  </div>
+  </div>  -->
 </template>
 
 <script>
 import axios from 'axios'
 import _ from 'lodash'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+// import ColumnGroup from 'primevue/columngroup'
 
 export default {
   name: 'DogNameGenerator',
+  components: {
+    DataTable,
+    Column
+  },
   data(){
     return {
-      dogNames: null,
-      randomDogName: null,
+      dogNames: [],
+      tags: ["Brown", "White"],
+      randomDogName: "",
       heartIcon: {
         isActive: false,
         activeClass: 'far fa-heart'
@@ -49,13 +72,22 @@ export default {
       this.heartIcon.isActive = false
       this.heartIcon.activeClass = 'far fa-heart'
       this.randomDogName = _.sample(dogNames)
+    },
+    viewProperties(){
+
     }
   },
   mounted(){
     const url = process.env.VUE_APP_DOGNAMESURL
     axios
-      .get(url + "dognames")
-      .then(response => (this.dogNames = response.data))
+    .get(url + "dognames")
+      // .then(response => (this.dogNames = response.data))
+    .then( response => {
+      //use this logic for favorites call since we want to have favorites stored in a separate call
+      //return tags in a dognames with tags method
+      response.data.forEach(dogName => dogName.tags = this.tags);
+      this.dogNames = response.data;
+    })
   }
 }
 </script>
