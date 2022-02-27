@@ -80,14 +80,14 @@ export default {
   mounted(){
     const url = process.env.VUE_APP_DOGNAMESURL
     axios
-    .get(url + "dognames")
-      // .then(response => (this.dogNames = response.data))
-    .then( response => {
-      //use this logic for favorites call since we want to have favorites stored in a separate call
-      //return tags in a dognames with tags method
-      response.data.forEach(dogName => dogName.tags = this.tags);
-      this.dogNames = response.data;
-    })
+    .get(url + "dognametags")
+    .then(response => (this.dogNames = response.data))
+    // .then( response => {
+    //   //use this logic for favorites call since we want to have favorites stored in a separate call
+    //   //return tags in a dognames with tags method
+    //   response.data.forEach(dogName => dogName.tags = this.tags);
+    //   this.dogNames = response.data;
+    // })
   }
 }
 </script>
