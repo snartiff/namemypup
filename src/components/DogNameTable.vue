@@ -3,24 +3,24 @@
     <Column field="dognames_id" header="ID"></Column>
     <Column field="name" header="NAME"></Column>
     <Column field="tags" header="TAGS">
-    <template #body="slotProps">
+      <template #body="slotProps">
       <ul>
-        <li>
-          {{slotProps.data.tags}}
-        </li>
-      </ul>
-    </template>
+        <li class="tag is-black is-rounded"  v-for="(tag, index) in slotProps.data.tags" v-bind:key="index">
+          {{ tag }}
+        </li>      
+        </ul>
+      </template>
     </Column>
-    <Column header="FAVORITES"></Column>
+    <Column field="isFavorite" header="FAVORITES">
+      <template #body="slotProps">
+        <i @click="updateFavorite(slotProps.data)" :class="[slotProps.data.isFavorite ? 'fas fa-heart fa-lg is-pink' : 'far fa-heart fa-lg is-pink']"></i>
+      </template>  
+    </Column>  
 </DataTable>
-    <button class="button is-warning is-rounded" @click="viewProperties()">Retrieve a Name <i id="retrieveNameIcon" class="fas fa-paw 2x"></i></button>
-  <!-- <div class="hello">
-    <ul id="dogNamesList">
-      <li v-for="dogName in dogNames" v-bind:key="dogName.dogname_id">
-        {{ dogName.dognames_id }}. {{dogName.name}}
-      </li>
-    </ul>
-  </div>
+<ul>
+  {{favorites}}
+</ul>
+    <!-- <button class="button is-warning is-rounded" @click="viewProperties()">Retrieve a Name <i id="retrieveNameIcon" class="fas fa-paw 2x"></i></button>
   <div id="randomDogNameWidget">
     <button class="button is-warning is-rounded" @click="selectRandomDogName(dogNames)">Retrieve a Name <i id="retrieveNameIcon" class="fas fa-paw 2x"></i></button>
     <template v-if="randomDogName != null">
@@ -42,9 +42,10 @@ import _ from 'lodash'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 // import ColumnGroup from 'primevue/columngroup'
+const url = process.env.VUE_APP_DOGNAMESURL
 
 export default {
-  name: 'DogNameGenerator',
+  name: 'DogNameTable',
   components: {
     DataTable,
     Column
@@ -52,42 +53,39 @@ export default {
   data(){
     return {
       dogNames: [],
-      tags: ["Brown", "White"],
+      favorites: [],
       randomDogName: "",
       heartIcon: {
         isActive: false,
         activeClass: 'far fa-heart'
-      }
+      },
+      userId: 1
     }
   },
   methods:{
     toggleHeartIcon(){
       this.heartIcon.isActive = !this.heartIcon.isActive
-      this.heartIcon.activeClass = this.heartIcon.isActive ? 'fas fa-heart' : 'far fa-heart'
+      this.heartIcon.activeClass = this.heartIcon.isActive ? 'fas fa-heart is-pink' : 'far fa-heart'
     },
     saveDogNameToFavorites(){
       this.toggleHeartIcon()
+    },
+    updateFavorite(dog){
+      dog.isFavorite = !dog.isFavorite
     },
     selectRandomDogName(dogNames){
       this.heartIcon.isActive = false
       this.heartIcon.activeClass = 'far fa-heart'
       this.randomDogName = _.sample(dogNames)
     },
-    viewProperties(){
-
+    getDogNamesWithTags(){
+      axios
+      .get(url + "dognametags?users_id=" + this.userId)
+      .then(response => (this.dogNames = response.data))
     }
   },
   mounted(){
-    const url = process.env.VUE_APP_DOGNAMESURL
-    axios
-    .get(url + "dognametags")
-    .then(response => (this.dogNames = response.data))
-    // .then( response => {
-    //   //use this logic for favorites call since we want to have favorites stored in a separate call
-    //   //return tags in a dognames with tags method
-    //   response.data.forEach(dogName => dogName.tags = this.tags);
-    //   this.dogNames = response.data;
-    // })
+    this.getDogNamesWithTags();
   }
 }
 </script>
@@ -97,6 +95,11 @@ export default {
 .fa-heart{
  color: pink;
 }
+
+.is-pink {
+ color: pink;
+}
+
 #favoriteHeartIcon{
   margin-right: 5px;
 }
@@ -111,14 +114,6 @@ font-family: 'Patrick Hand SC', cursive;
 }
 h3 {
   margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
 }
 a {
   color: #42b983;

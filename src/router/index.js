@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-import DogNameGenerator from "@/components/DogNameGenerator.vue";
+import DogNameTable from "@/components/DogNameTable.vue";
 import Favorites from "@/components/Favorites.vue";
 import Home from "@/components/Home.vue";
 import Products from "@/components/Products.vue";
@@ -11,9 +11,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/dognamegenerator",
-    name: "DogNameGenerator",
-    component: DogNameGenerator,
+    path: "/dognametable",
+    name: "DogNameTable",
+    component: DogNameTable,
   },
   {
     path: "/favorites",
